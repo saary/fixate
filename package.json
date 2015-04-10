@@ -1,0 +1,25 @@
+{
+  "name": "fixated",
+  "version": "0.0.1",
+  "description": "Fixed Width Text Stream",
+  "main": "fixated.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "iconv": "^2.1.6"    
+  },
+  "scripts": {
+    "test": "mocha test"
+  },
+  "keywords": [
+    "fixed",
+    "width",
+    "text",
+    "file",
+    "field",
+    "stream",
+    "object"
+  ],
+  "author": "Saar Yahalom",
+  "license": "MIT"
+}
