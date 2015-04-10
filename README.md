@@ -1,13 +1,16 @@
-# Fixate
+# Fixated
 Fixed width text stream for node.js
 
 ## What is it?
 Easily create fixed width text stream/files with node.js
 
+### Install
+`npm install --save fixated`
+
 ## How?
 
 ```javascript
-var Fixate = require('Fixate');
+var Fixated = require('Fixated');
 
 var format = {
   firstName: 15,
@@ -15,11 +18,11 @@ var format = {
   address: 200,
 };
 
-var fixate = new Fixate(format);
-fixate.pipe(require('fs').createWriteStream('./out.txt');
-fixate.write({firstName: 'charlie', lastName: 'doe', address: '1st some road, some where'});
+var fixated = new Fixated(format);
+fixated.pipe(require('fs').createWriteStream('./out.txt');
+fixated.write({firstName: 'charlie', lastName: 'doe', address: '1st some road, some where'});
 
-fixate.end();
+fixated.end();
 
 // out.txt should contain one line:
 // charlie        doe            1st some road, some where
