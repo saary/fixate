@@ -1,6 +1,6 @@
 {
   "name": "fixated",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Fixed Width Text Stream",
   "main": "fixated.js",
   "dependencies": {

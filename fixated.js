@@ -42,22 +42,28 @@ Fixated.prototype._transform = function (data, encoding, callback) {
 
   var offset = 0;
   var format = this._format;
+  var rightAlignment = this._options.rightAlignment;
 
   Object.keys(this._format).forEach(function(key) {
     if (data[key]) {
       var buffer = convert? convert(data[key]): data[key];
+      var alignment = 0;
+
+      if (rightAlignment && buffer.length < format[key]) {
+        alignment += format[key] - buffer.length;
+      }
 
       if (Buffer.isBuffer(buffer)) {
-        buffer.copy(line, offset, 0, format[key])
+        buffer.copy(line, offset + alignment, 0, format[key])
       }
       else {
-        line.write(buffer.toString(), offset, format[key]);
+        line.write(buffer.toString(), offset + alignment, format[key]);
       }
     }
     
     offset += format[key];
   });
-
+  
   this.push(line);
   return callback();
 };
