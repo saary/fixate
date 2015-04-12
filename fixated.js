@@ -48,9 +48,10 @@ Fixated.prototype._transform = function (data, encoding, callback) {
     if (data[key]) {
       var buffer = convert? convert(data[key]): data[key];
       var alignment = 0;
+      var byteLength = rightAlignment && Buffer.byteLength(buffer);
 
-      if (rightAlignment && buffer.length < format[key]) {
-        alignment += format[key] - buffer.length;
+      if (rightAlignment && byteLength < format[key]) {
+        alignment += format[key] - byteLength;
       }
 
       if (Buffer.isBuffer(buffer)) {
