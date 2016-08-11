@@ -12,11 +12,11 @@ Easily create fixed width text stream/files with node.js
 ```javascript
 var Fixated = require('Fixated');
 
-var format = {
-  firstName: 15,
-  lastName: 15,
-  address: 200,
-};
+var format = [
+  [firstName, 15],
+  [lastName, 15],
+  [address, 200],
+];
 
 var fixated = new Fixated(format);
 fixated.pipe(require('fs').createWriteStream('./out.txt');

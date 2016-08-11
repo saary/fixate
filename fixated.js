@@ -1,5 +1,8 @@
+'use strict';
 var Transform = require('stream').Transform;
 var util = require('util');
+
+var rowDelimiters = {'unix': '\n', 'mac': '\r', 'windows': '\r\n'};
 
 util.inherits(Fixated, Transform);
 
@@ -12,6 +15,7 @@ function Fixated(format, opt) {
   opt.writableObjectMode = true;
   opt.readableObjectMode = false;
   opt.fillChar = opt.fillChar || ' ';
+  this._rowDelimiter  = (rowDelimiters[opt.rowDelimiter] ? rowDelimiters[opt.rowDelimiter] : rowDelimiters.windows);
 
   this._options = opt;
 
@@ -19,11 +23,11 @@ function Fixated(format, opt) {
   this._format = format;
 
   var lineSize = 0;
-  Object.keys(this._format).forEach(function(key) {
-    lineSize += format[key];
+  this._format.forEach(function(item) {
+    lineSize += item[1];
   });
 
-  lineSize += 2; // \r\n 
+  lineSize += this._rowDelimiter.length;
 
   this._lineSize = lineSize;
 
@@ -36,7 +40,7 @@ Fixated.prototype._transform = function (data, encoding, callback) {
   line.fill(this._options.fillChar);
 
   // place new line
-  line.write('\r\n', this._lineSize - 2, 'ascii');
+  line.write(this._rowDelimiter, this._lineSize - this._rowDelimiter.length, 'ascii');
 
   var convert = this._options.convert;
 
@@ -44,25 +48,27 @@ Fixated.prototype._transform = function (data, encoding, callback) {
   var format = this._format;
   var rightAlignment = this._options.rightAlignment;
 
-  Object.keys(this._format).forEach(function(key) {
+  this._format.forEach(function(item) {
+    var key = item[0];
+    var keyLength = item[1];
     if (data[key]) {
       var buffer = convert? convert(data[key]): data[key];
       var alignment = 0;
       var byteLength = rightAlignment && Buffer.byteLength(buffer);
 
       if (rightAlignment && byteLength < format[key]) {
-        alignment += format[key] - byteLength;
+        alignment += keyLength - byteLength;
       }
 
       if (Buffer.isBuffer(buffer)) {
-        buffer.copy(line, offset + alignment, 0, format[key])
+        buffer.copy(line, offset + alignment, 0, keyLength);
       }
       else {
-        line.write(buffer.toString(), offset + alignment, format[key]);
+        line.write(buffer.toString(), offset + alignment, keyLength);
       }
     }
     
-    offset += format[key];
+    offset += keyLength;
   });
   
   this.push(line);
@@ -70,4 +76,3 @@ Fixated.prototype._transform = function (data, encoding, callback) {
 };
 
 module.exports = Fixated;
-
