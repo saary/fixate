@@ -12,6 +12,7 @@ function Fixated(format, opt) {
   opt.writableObjectMode = true;
   opt.readableObjectMode = false;
   opt.fillChar = opt.fillChar || ' ';
+  this._rowDelimiter  = opt.rowDelimiter || require('os').EOL;
 
   this._options = opt;
 
@@ -23,7 +24,7 @@ function Fixated(format, opt) {
     lineSize += format[key];
   });
 
-  lineSize += 2; // \r\n 
+  lineSize += this._rowDelimiter.length;
 
   this._lineSize = lineSize;
 
@@ -36,7 +37,7 @@ Fixated.prototype._transform = function (data, encoding, callback) {
   line.fill(this._options.fillChar);
 
   // place new line
-  line.write('\r\n', this._lineSize - 2, 'ascii');
+  line.write(this._rowDelimiter, this._lineSize - this._rowDelimiter.length, 'ascii');
 
   var convert = this._options.convert;
 
