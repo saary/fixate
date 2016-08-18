@@ -1,6 +1,6 @@
 {
   "name": "fixated",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Fixed Width Text Stream",
   "main": "fixated.js",
   "dependencies": {
@@ -11,6 +11,9 @@
   "scripts": {
     "test": "mocha test"
   },
+  "contributors": [
+    { "name": "jobe451", "url": "https://github.com/jobe451"}
+  ],
   "keywords": [
     "fixed",
     "width",
